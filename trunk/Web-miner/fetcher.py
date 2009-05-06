@@ -51,7 +51,7 @@ def fetch(n):
                     data_info = {'url':url,'contents': zlib.compress(wfd.result)}
                     data = cPickle.dumps(data_info)
                     compressed_data = zlib.compress(data,6)
-                    store_server_cnxn.send(compressed_data)
+                    store_server_cnxn.send(compressed_data + "\r\n")
                     store_server_cnxn.close()
                 #print wfd.result
                 deltatime = time.time() - start_time  
