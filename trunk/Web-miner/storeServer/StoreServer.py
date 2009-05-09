@@ -7,12 +7,16 @@ from twisted.protocols.basic import LineReceiver
 from twisted.internet.protocol import Factory
 from twisted.internet import reactor
 from twisted.internet.protocol import Protocol,ServerFactory
+from crawlerConfig import *
 
-REPO_PATH		='/home/suvash/workspace/python/WebCrawler/Testtrunk/Repo/'
+
 def delete_anchors(url):
         return url.rstrip('#'+urlparse.urlparse(url).fragment)
+
 class storeServerProtocol(LineReceiver):
-    MAX_LENGTH=64*1024
+
+    MAX_LENGTH = 64*1024
+    
     def pageCallback(self,result,url,host,fname):
         if os.path.isdir(host):
             os.chdir(REPO_PATH+host)
@@ -22,8 +26,8 @@ class storeServerProtocol(LineReceiver):
             os.mkdir(host)
             os.chdir(REPO_PATH+host)
             compressBuf(result,url,fname)
-
         os.chdir(REPO_PATH)
+        
     def getUrlParams(self,url):
         url_split=urlparse.urlparse(url)
         if url_split.path:
@@ -34,14 +38,13 @@ class storeServerProtocol(LineReceiver):
         return url_split.hostname,str(fname)
         
     def deserialize(self,buf):
-
         da=cPickle.loads(zlib.decompress(buf))
         content=zlib.decompress(da['contents'])
         return da['url'],content
+    
     def connectionMade(self):
         print "Connected from", self.transport.client
-
-        
+    
     #Callback called when a line is received
     def lineReceived(self, Url):
     	#print Url
@@ -49,19 +52,16 @@ class storeServerProtocol(LineReceiver):
         host,fname=self.getUrlParams(url)
         self.pageCallback(cont,url,host,fname)
         print "called"
-        
-    
-            
+                    
     def connectionLost(self,reason):
         print reason
-        
          
 class storeServer(ServerFactory):
-    
     protocol = storeServerProtocol
     def __init__(self):
 	    print "Server Started"
+
 if __name__=='__main__':
-    os.chdir(REPO_PATH)
-    reactor.listenTCP(2021, storeServer())
+    os.chdir("."+REPO_PATH)
+    reactor.listenTCP(STORE_SERVER_PORT, storeServer())
     reactor.run()
