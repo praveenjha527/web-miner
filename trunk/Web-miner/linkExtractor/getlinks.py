@@ -9,14 +9,13 @@
 
 __author__ = " Biru C. Sainju "
 __version__ = "0.1"
+
+
 import glob
-
 import socket
+from crawlerConfig import *
 
-REPO_PATH='/home/suvash/workspace/python/WebCrawler/Testtrunk/Repo/*/*.gz'
-HOST='127.0.0.1' #urlfrontier server
-PORT=2220 # port on which urlfrontier is running
-
+REPO_PATH='./Repo/*/*.gz'
 
 
 from urlgrabber import crawl
@@ -24,7 +23,7 @@ from urlgrabber import crawl
 class DataSource(object):
     def __init__(self):
         
-        self.text_files = glob.glob(REPO_PATH)
+        self.text_files = glob.glob(REPO_PATH+"*/*.gz")
 
     def __len__(self):
         return len(self.text_files)
@@ -38,18 +37,14 @@ class DataSource(object):
 source = DataSource()
 
 def mapfn(key, value):
-
-
     final_urls,host=crawl(value,filemode=True)
     for url in final_urls:
-
         yield host, url
 
 
 def reducefn(key, value):
-    
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect((HOST, PORT))
+    s.connect((HOST, URL_FRONTIER_SERVER_PORT))
     for i in value:
         s.send(i+"\r\n")
         data = s.recv(4096)

@@ -30,10 +30,11 @@ from URLInfo import get_baseUrl
 from time import time
 from time import sleep
 import os
+from crawlerConfig import *
 
 #keeps the track of the client connected to the server
 connected_clients = []
-QUEUE_LOC = "queues/"
+
 #returns the priority of the url        
 def getPriority(url):
     return randint(0,9)
@@ -91,9 +92,9 @@ class UrlFrontierServer(Factory):
     protocol = UrlFrontierProtocol
     
     def startFactory(self):
-        if not (os.path.exists(QUEUE_LOC)):
-            os.mkdir(QUEUE_LOC)
-        os.chdir(QUEUE_LOC)
+        if not (os.path.exists(QUEUE_PATH)):
+            os.mkdir(QUEUE_PATH)
+        os.chdir(QUEUE_PATH)
         self.front_queues = UrlFrontQueue(10)
         self.back_queues = UrlBackQueue(50)
     
@@ -133,9 +134,6 @@ def updateBackQueue(front_queues,back_queues):
             back_queues.empty_queues.remove(back_queue_index)
             isUrlHostUnique = True
             
-        
-    
-    
 
 class UrlServer(xmlrpc.XMLRPC):
     
@@ -145,6 +143,7 @@ class UrlServer(xmlrpc.XMLRPC):
         xmlrpc.XMLRPC.__init__(self)
     
     def xmlrpc_getUrl(self):
+        
         if not self.back_queues.host_timestamp_pQueue.qsize():  
             updateBackQueue(self.front_queues, self.back_queues)          
         host, priority = self.back_queues.host_timestamp_pQueue.get_with_priority(timeout = 0) 
@@ -163,20 +162,17 @@ class UrlServer(xmlrpc.XMLRPC):
 
     
     def xmlrpc_update(self,*args):
-        pageretrievaltime, url_host  = args
+        info, pageretrievaltime, url_host  = args
         print url_host, pageretrievaltime
         if url_host in self.back_queues.host_to_queue_maptable.keys():
-            self.back_queues.host_timestamp_pQueue.qsize()
+            #self.back_queues.host_timestamp_pQueue.qsize()
             self.back_queues.host_timestamp_pQueue.put(url_host, priority = (time()+10*pageretrievaltime),timeout = 0)
-            return 0
-        else:
-            return 1
-    
-    
+      
+          
 if __name__ == '__main__': 
     frontier_server = UrlFrontierServer()
-    reactor.listenTCP(2220,frontier_server)
+    reactor.listenTCP(URL_FRONTIER_SERVER_PORT,frontier_server)
     urlserver = UrlServer(frontier_server.front_queues,frontier_server.back_queues)
-    reactor.listenTCP(3693, server.Site(urlserver))
+    reactor.listenTCP(URL_SERVER_PORT, server.Site(urlserver))
     reactor.run()
 
