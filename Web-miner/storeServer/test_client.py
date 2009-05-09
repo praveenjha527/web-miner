@@ -1,6 +1,7 @@
 # Echo client program
 import my_gzip
 import zlib
+
 def decompress(fname):
     zfile = my_gzip.GzipFile(filename=fname,mode = 'rb',   compresslevel = 2)
     url=zfile.readline().rstrip('\n')
@@ -10,6 +11,7 @@ def decompress(fname):
     print len(contents)
     data={'url':url,'contents':contents}
     return data
+
 fname='index.html.gz'
 sss=decompress(fname)
 import socket
