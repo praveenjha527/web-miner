@@ -7,7 +7,7 @@ def is_crawlable(url):
     robots = "http://"+base_url+"/robots.txt"
     robotTxtParser.set_url(robots)
     robotTxtParser.read()
-    return robotTxtParser.can_fetch("IOEBOT",url)
+    return robotTxtParser.can_fetch("web-miner",url)
 
 if __name__ == "__main__":
     print is_crawlable("http://www.google.com/images")
