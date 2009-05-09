@@ -17,7 +17,7 @@ from twisted.protocols.basic import LineReceiver
 from twisted.internet.protocol import ClientFactory
 from twisted.internet import reactor
 from twisted.internet.protocol import Protocol
-
+from crawlerConfig import *
 
 class UrlSendProtocol(LineReceiver):
     
@@ -51,7 +51,6 @@ class UrlSendClientFactory(ClientFactory):
         self.data =[]
         with open("urls.txt","rb") as f:
             for line in f:
-                #print repr(line)
                 self.data.append(line)
         print len(self.data)
         print 'Started to connect.'
@@ -64,7 +63,7 @@ class UrlSendClientFactory(ClientFactory):
 
 
 if __name__ == '__main__':
-    reactor.connectTCP("localhost",2220, UrlSendClientFactory())
+    reactor.connectTCP(HOST,URL_FRONTIER_SERVER_PORT, UrlSendClientFactory())
     reactor.run()
 
             

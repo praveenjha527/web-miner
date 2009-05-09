@@ -21,12 +21,12 @@ from lxml.html import fromstring
 from lxml.html.clean import Cleaner
 
 class MyURLResolver:
+    
     def __init__(self,url,filemode):
         if filemode:
 		temp_dict=decompress(url)
 	     	url_contents=temp_dict['contents']
 	    	self.url=temp_dict['url']
-
         else:
 		self.url=url
                 url_contents=urllib2.urlopen(url).read()
@@ -82,6 +82,8 @@ def crawl(url,filemode=None):
     raw_links=URLResolver.getlinks()
     final_urls,host=URLResolver.processurls(URLResolver.url,raw_links)
     return final_urls,host
+
+
 if __name__=="__main__":
     #USAGE
     url='http://www.linuxjournal.com'
@@ -89,7 +91,6 @@ if __name__=="__main__":
     print len(final_urls)
     myfile = open("urls.txt","a+")
     for url in final_urls:
-
         try:
             print repr(url)
         except:

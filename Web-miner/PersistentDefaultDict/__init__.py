@@ -11,16 +11,19 @@
 
 
 __author__ = " Biru C. Sainju "
-
 __version__ = "0.1"
+
 from sqlobject import *
+from collections import defaultdict
+
 connection_string='mysql://root@localhost/crawler'
 connection = connectionForURI(connection_string)
 sqlhub.processConnection = connection
-from collections import defaultdict
+
 class Crawled(SQLObject):
     host = StringCol()
     url = StringCol()
+
 class sublist(list):
     def append(self,url,model,host,dbreadmode=False):
         super(sublist,self).append(url)

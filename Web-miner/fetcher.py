@@ -19,12 +19,10 @@ import time
 import cPickle
 import zlib
 import socket
+from crawlerConfig import *
 
 
 #fetch the webpage from the internet
-HOST = '127.0.0.1'    # The remote host
-PORT = 2021              # The same port as used by the server
-
 @defer.deferredGenerator
 def fetch(n):
     global url_server_cnxn
@@ -35,9 +33,10 @@ def fetch(n):
         wfd = defer.waitForDeferred(threads.deferToThread(url_server_cnxn.getUrl))
         yield wfd
         #print wfd.result
+        
         if wfd.result != None:
             url , time_to_wait = wfd.result
-            #print urlzz
+            #print urls
             if (is_crawlable(url) == True):
                 #if time tow wait has not expired wait for the time
                 if((time.time()-time_to_wait) > 0):
@@ -47,17 +46,14 @@ def fetch(n):
                 yield wfd
                 if( wfd.result and len(wfd.result) < 65536 ):
                     store_server_cnxn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                    store_server_cnxn.connect((HOST, PORT))
+                    store_server_cnxn.connect((HOST, URL_SERVER_PORT))
                     data_info = {'url':url,'contents': zlib.compress(wfd.result)}
                     data = cPickle.dumps(data_info)
                     compressed_data = zlib.compress(data,6)
                     store_server_cnxn.send(compressed_data + "\r\n")
                     store_server_cnxn.close()
-                #print wfd.result
-                deltatime = time.time() - start_time  
-        else:
-                deltatime = 0  
-                
+                #sh wfd.result
+                deltatime = time.time() - start_time   
         wfd = defer.waitForDeferred(threads.deferToThread(url_server_cnxn.update,deltatime,get_baseUrl(url)))
         yield wfd
         
@@ -68,8 +64,9 @@ def initFetcher(n):
         
 #run the crawler   
 def run():
+    
     global url_server_cnxn
-    url_server_cnxn = xmlrpclib.Server("http://localhost:3693")
+    url_server_cnxn = xmlrpclib.Server("http://"+HOST+":"+`URL_SERVER_PORT`)
     initFetcher(10)
     
 
