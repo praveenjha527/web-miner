@@ -8,8 +8,8 @@
 # GNU General Public License for more details.
 
 __author__ = " Biru C. Sainju"
-
 __version__ = "0.1"
+
 import cPickle
 import os
 import zlib
@@ -19,7 +19,11 @@ from twisted.protocols.basic import LineReceiver
 from twisted.internet.protocol import Factory
 from twisted.internet import reactor
 from twisted.internet.protocol import Protocol,ServerFactory
-from crawlerConfig import *
+import sys
+
+sys.path.append("/home/suvash/workspace/python/web-miner/Web-miner")
+
+from configuration.crawlerConfig import *
 
 
 def delete_anchors(url):
@@ -27,7 +31,7 @@ def delete_anchors(url):
 
 class storeServerProtocol(LineReceiver):
 
-    MAX_LENGTH = 64*1024
+    MAX_LENGTH = 1024*1024
     
     def pageCallback(self,result,url,host,fname):
         if os.path.isdir(host):
@@ -74,6 +78,6 @@ class storeServer(ServerFactory):
 	    print "Server Started"
 
 if __name__=='__main__':
-    os.chdir("."+REPO_PATH)
+    os.chdir(REPO_PATH)
     reactor.listenTCP(STORE_SERVER_PORT, storeServer())
     reactor.run()

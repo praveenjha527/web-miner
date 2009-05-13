@@ -1,6 +1,6 @@
 from StringIO import StringIO
 from HTMLParser import HTMLParser
-import zlib
+
 
 class InputStreamReader(object):
 

@@ -12,7 +12,6 @@ __date__ = " Fri Sep 19 18:40:16 NPT 2008"
 __version__ = "0.1"
 
 
-
 from urlparse import urljoin
 import urllib2
 import re

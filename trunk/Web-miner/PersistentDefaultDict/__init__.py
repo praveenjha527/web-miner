@@ -12,16 +12,20 @@
 
 __author__ = " Biru C. Sainju "
 __version__ = "0.1"
+
 import sys
 import os
 from sqlobject import *
 from collections import defaultdict
+
 if sys.platform[:3] == "win":
     def getcwd():
         return os.getcwd().replace(':', '|')
 else:
     getcwd = os.getcwd
+
 db=os.path.join(getcwd(), 'crawler.db')
+
 connection_string='sqlite:///'+db #for sqlite
 #connection_string='mysql://root@localhost/crawler' for mysql
 connection = connectionForURI(connection_string)
@@ -53,7 +57,9 @@ class PersistentDict(defaultdict):
             self[row.host].append(row.url,model,row.host,True)
 
 crawled_urls = PersistentDict(Crawled)
-"""if __name__=="__main__":
+
+
+"""if __name__== "__main__":
     crawled_urls = PersistentDict(Crawled)
     url='images'
     host='www.google.com'
@@ -61,5 +67,6 @@ crawled_urls = PersistentDict(Crawled)
         print "satisfied"
         crawled_urls['tupac'].append('biruthesupergreat',Crawled,'tupac')
     else:
-	    print "url already exists"
+	    print "url already exists
 """
+

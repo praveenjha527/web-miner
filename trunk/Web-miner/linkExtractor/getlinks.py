@@ -13,7 +13,7 @@ __version__ = "0.1"
 
 import glob
 import socket
-from crawlerConfig import *
+from configuration.crawlerConfig import *
 
 from urlgrabber import crawl
 

@@ -2,6 +2,7 @@ import sys
 
 class ClassLoader(object):
 
+    @classmethod
     def loadClass(cls, name, module=None):
 
         if module is None:
@@ -24,4 +25,4 @@ class ClassLoader(object):
         except AttributeError:
             raise ImportError, "Module %s has no class %s" %(module, name)
 
-    loadClass = classmethod(loadClass)
+#    loadClass = classmethod(loadClass)
