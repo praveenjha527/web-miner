@@ -13,6 +13,10 @@ __version__ = "0.1"
 
 import glob
 import socket
+import sys
+
+sys.path.append("/home/suvash/workspace/python/web-miner/Web-miner")
+
 from configuration.crawlerConfig import *
 
 from urlgrabber import crawl
@@ -20,7 +24,7 @@ from urlgrabber import crawl
 class DataSource(object):
     def __init__(self):
         
-        self.text_files = glob.glob("."+REPO_PATH+"*/*.gz")
+        self.text_files = glob.glob(REPO_PATH+"*/*.gz")
 
     def __len__(self):
         return len(self.text_files)
@@ -31,6 +35,7 @@ class DataSource(object):
     def __getitem__(self, key):
        
         return key
+    
 source = DataSource()
 
 def mapfn(key, value):
