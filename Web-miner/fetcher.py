@@ -46,7 +46,7 @@ def fetch(n):
                 yield wfd
                 if( wfd.result and len(wfd.result) < 65536 ):
                     store_server_cnxn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                    store_server_cnxn.connect((HOST, URL_SERVER_PORT))
+                    store_server_cnxn.connect((HOST, STORE_SERVER_PORT))
                     data_info = {'url':url,'contents': zlib.compress(wfd.result)}
                     data = cPickle.dumps(data_info)
                     compressed_data = zlib.compress(data,6)
@@ -67,7 +67,8 @@ def run():
     
     global url_server_cnxn
     url_server_cnxn = xmlrpclib.Server("http://"+HOST+":"+`URL_SERVER_PORT`)
-    initFetcher(10)
+    #
+    initFetcher(NO_OF_CONCURRENT_CONNECTION)
     
 
         
