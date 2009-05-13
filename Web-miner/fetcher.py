@@ -5,8 +5,10 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
+
 __author__ = ' suvash '
 __lastModified__ = ' Nov 22, 2008 '
+
 
 from twisted.internet import defer
 from twisted.internet import reactor
@@ -19,7 +21,7 @@ import time
 import cPickle
 import zlib
 import socket
-from crawlerConfig import *
+from configuration.crawlerConfig import *
 
 
 #fetch the webpage from the internet
@@ -28,32 +30,37 @@ def fetch(n):
     global url_server_cnxn
     global store_server_cnxn
     while True:
-        print " i am crawler no ", n
+        #print " i am crawler no ", n
         deltatime = 0
         wfd = defer.waitForDeferred(threads.deferToThread(url_server_cnxn.getUrl))
         yield wfd
-        #print wfd.result
-        
         if wfd.result != None:
-            url , time_to_wait = wfd.result
-            #print urls
-            if (is_crawlable(url) == True):
-                #if time tow wait has not expired wait for the time
-                if((time.time()-time_to_wait) > 0):
-                    time.sleep(time.time()-time_to_wait)
-                start_time = time.time()
-                wfd = defer.waitForDeferred(getPage(url))
-                yield wfd
-                if( wfd.result and len(wfd.result) < 65536 ):
-                    store_server_cnxn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                    store_server_cnxn.connect((HOST, STORE_SERVER_PORT))
-                    data_info = {'url':url,'contents': zlib.compress(wfd.result)}
-                    data = cPickle.dumps(data_info)
-                    compressed_data = zlib.compress(data,6)
-                    store_server_cnxn.send(compressed_data + "\r\n")
-                    store_server_cnxn.close()
-                #sh wfd.result
-                deltatime = time.time() - start_time   
+            try:
+                url , time_to_wait = wfd.result
+            except:
+                print "error retriving url from Urlserver"
+                pass
+            else:
+                #print urls
+                if (is_crawlable(url) == True):
+                    #if time to wait has not expired wait for the time
+                    if((time.time()-time_to_wait) > 0):
+                        time.sleep(time.time()-time_to_wait)
+                    start_time = time.time()
+                    wfd = defer.waitForDeferred(getPage(url))
+                    yield wfd                   
+                                    
+                    if( wfd.result and len(wfd.result) < 1048576 ):
+                        store_server_cnxn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                        store_server_cnxn.connect((HOST, STORE_SERVER_PORT))
+                        data_info = {'url':url,'contents': zlib.compress(wfd.result)}
+                        data = cPickle.dumps(data_info)
+                        compressed_data = zlib.compress(data,6)
+                        store_server_cnxn.send(compressed_data + "\r\n")
+                        store_server_cnxn.close()
+                    #print wfd.result
+                    deltatime = time.time() - start_time 
+                  
         wfd = defer.waitForDeferred(threads.deferToThread(url_server_cnxn.update,deltatime,get_baseUrl(url)))
         yield wfd
         
