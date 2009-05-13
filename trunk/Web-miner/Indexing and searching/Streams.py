@@ -1,7 +1,13 @@
 from StringIO import StringIO
 from HTMLParser import HTMLParser
+from lxml.html import document_fromstring
 
-
+def getTitle(htmldata):
+    doc = document_fromstring(htmldata)
+    for title in doc.cssselect('title'):
+        return title.text_content()
+    
+    
 class InputStreamReader(object):
 
     def __init__(self, inputStream, encoding):
@@ -73,14 +79,22 @@ class RepoReader(object):
 
     def read(self, length=-1):
         url = self.reader.getUrl()
+        htmldata = ""
         while True:
             data = self.reader.read(length)
+            htmldata = htmldata + data
             if len(data) > 0:
                 self.parser.feed(data)
                 data = self.parser._read(length)
                 if len(data) == 0:
                     continue
-            return url,data
+            try:
+                title= getTitle(htmldata)   
+            except:
+                title = ""
+            if title == None:
+                title = ""
+            return url,title,data
 
     def close(self):
 
