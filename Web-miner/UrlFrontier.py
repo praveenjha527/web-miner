@@ -162,7 +162,7 @@ class UrlServer(xmlrpc.XMLRPC):
 
     
     def xmlrpc_update(self,*args):
-        info, pageretrievaltime, url_host  = args
+        pageretrievaltime, url_host  = args
         print url_host, pageretrievaltime
         if url_host in self.back_queues.host_to_queue_maptable.keys():
             #self.back_queues.host_timestamp_pQueue.qsize()
