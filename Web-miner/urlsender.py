@@ -17,7 +17,7 @@ from twisted.protocols.basic import LineReceiver
 from twisted.internet.protocol import ClientFactory
 from twisted.internet import reactor
 from twisted.internet.protocol import Protocol
-from crawlerConfig import *
+from configuration.crawlerConfig import *
 
 class UrlSendProtocol(LineReceiver):
     

@@ -9,6 +9,7 @@ from lucene import \
 
 class Searcher(object):
 
+    @classmethod
     def main(cls, argv):
 
         if len(argv) != 3:
@@ -23,6 +24,7 @@ class Searcher(object):
 
             cls.search(indexDir, q)
 
+    @classmethod
     def search(cls, indexDir, q):
 
         fsDir = FSDirectory.getDirectory(indexDir, False)
@@ -32,15 +34,17 @@ class Searcher(object):
         start = time()
         hits = searcher.search(query)
         duration = timedelta(seconds=time() - start)
-
+        
+        #result = {"no_of_hits":hits.length(),"duration":duration, "query":q,}
+        #return 
         print "Found %d document(s) (in %s) that matched query '%s':" %(hits.length(), duration, q)
 
         for hit in hits:
             doc = Hit.cast_(hit).getDocument()
-            print doc["url"]
-
-    main = classmethod(main)
-    search = classmethod(search)
+            print doc
+            #print doc["url"]
+#    main = classmethod(main)
+#   search = classmethod(search)
 
 
 if __name__ == "__main__":     

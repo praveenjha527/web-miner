@@ -14,6 +14,7 @@ from ClassLoader import ClassLoader
 
 class FileIndexer(object):
 
+    @classmethod
     def main(cls, argv):
 
         if len(argv) != 3:
@@ -44,6 +45,7 @@ class FileIndexer(object):
 
         print "Indexing %s files took %s" %(numIndexed, duration)
 
+    @classmethod
     def index(cls, indexDir, dataDir):
 
         if not (os.path.exists(dataDir) and os.path.isdir(dataDir)):
@@ -57,7 +59,8 @@ class FileIndexer(object):
         writer.close()
 
         return numIndexed
-
+    
+    @classmethod
     def indexDirectory(cls, writer, dir):
 
         count = 0
@@ -77,6 +80,7 @@ class FileIndexer(object):
 
         return count
 
+    @classmethod
     def indexFile(cls, writer, path):
 
         name, ext = os.path.splitext(path)
@@ -106,7 +110,7 @@ class FileIndexer(object):
    
 
 
-    main = classmethod(main)
-    index = classmethod(index)
-    indexDirectory = classmethod(indexDirectory)
-    indexFile = classmethod(indexFile)
+#    main = classmethod(main)
+#    index = classmethod(index)
+#    indexDirectory = classmethod(indexDirectory)
+#    indexFile = classmethod(indexFile)
