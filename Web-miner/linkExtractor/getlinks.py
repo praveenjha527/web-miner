@@ -15,15 +15,12 @@ import glob
 import socket
 from crawlerConfig import *
 
-REPO_PATH='./Repo/*/*.gz'
-
-
 from urlgrabber import crawl
 
 class DataSource(object):
     def __init__(self):
         
-        self.text_files = glob.glob(REPO_PATH+"*/*.gz")
+        self.text_files = glob.glob("."+REPO_PATH+"*/*.gz")
 
     def __len__(self):
         return len(self.text_files)
