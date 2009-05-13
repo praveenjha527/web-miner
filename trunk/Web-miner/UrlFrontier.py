@@ -30,7 +30,7 @@ from URLInfo import get_baseUrl
 from time import time
 from time import sleep
 import os
-from crawlerConfig import *
+from configuration.crawlerConfig import *
 
 #keeps the track of the client connected to the server
 connected_clients = []
