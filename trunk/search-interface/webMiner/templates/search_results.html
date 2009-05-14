@@ -1,0 +1,39 @@
+{% load pagination_tags %} 
+<style>
+@import url('{{MEDIA_URL}}css/styles.css');
+</style>
+
+
+<head>
+<title>webMiner search</title>    
+
+</head>
+<body>
+{% if query_string %}
+<h1>Search Result For {{ query_string }} </h1>
+{% autopaginate result 10 %} 
+Please show how to show the links
+{% for item in result %}
+
+<a href="{% url itemdetail item.Id%}"><h2>{{result.result}}</h2></a><br/>
+{% endfor %}
+ {% paginate %} 
+{% else %}
+
+<img src="{{MEDIA_URL}}images/logo.jpg" width="500px" height="200px" />
+<form method="GET" action=".">
+        <table>
+            {{ form.as_table }}
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+					<input type="text" name="q" size = 55>
+                    <input type="submit" value="Search">
+                </td>
+            </tr>
+        </table>
+
+     </form>
+{% endif %}
+</body>
+</html>
