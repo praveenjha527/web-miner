@@ -2,22 +2,40 @@
 <style>
 @import url('{{MEDIA_URL}}css/styles.css');
 </style>
+<style>
+.highlight { background-color: yellow }
+</style>
+<script src="{{MEDIA_URL}}js/jquery.js"> </script>
+<script src="{{MEDIA_URL}}js/jquery.highlight-3.js"> </script>
+<script>
+var qterm='{{ query_string }}'
+$(document).ready(function(){
 
+
+if (qterm != ''){
+
+	$('.result').highlight(qterm);
+	}
+});
+</script>
 
 <head>
 <title>webMiner search</title>    
 
 </head>
 <body>
+
 {% if query_string %}
 <h1>Search Result For {{ query_string }} </h1>
 {% autopaginate result 10 %} 
-Please show how to show the links
+<div class="result">
+Please show how to show the links beautiful and nice.
 {% for item in result %}
 
 <a href="{% url itemdetail item.Id%}"><h2>{{result.result}}</h2></a><br/>
 {% endfor %}
  {% paginate %} 
+ </div>
 {% else %}
 
 <img src="{{MEDIA_URL}}images/logo.jpg" width="500px" height="200px" />
@@ -34,6 +52,7 @@ Please show how to show the links
         </table>
 
      </form>
+	
 {% endif %}
 </body>
 </html>
