@@ -31,6 +31,8 @@ from time import time
 from time import sleep
 import os
 from configuration.crawlerConfig import *
+from PersistentDefaultDict import Crawled
+from PersistentDefaultDict import crawled_urls
 
 #keeps the track of the client connected to the server
 connected_clients = []
@@ -79,8 +81,11 @@ class UrlFrontierProtocol(LineReceiver):
     #Callback called when a line is received
     def lineReceived(self, Url):
         #print Url
-        queue_index = getPriority(Url) 
-        self.factory.front_queues.queues[queue_index].put(Url)
+        if url not in crawled_urls[host]:
+            crawled_urls[host].append(url,Crawled,host)
+            queue_index = getPriority(Url) 
+            self.factory.front_queues.queues[queue_index].put(Url)        
+        
         self.transport.write("OK\r\n")
             
     def connectionLost(self,reason):
