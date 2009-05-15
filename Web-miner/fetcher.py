@@ -30,7 +30,7 @@ def fetch(n):
     global url_server_cnxn
     global store_server_cnxn
     while True:
-        #print " i am crawler no ", n
+        print " i am crawler no ", n
         deltatime = 0
         wfd = defer.waitForDeferred(threads.deferToThread(url_server_cnxn.getUrl))
         yield wfd
