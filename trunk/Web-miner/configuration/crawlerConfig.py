@@ -12,3 +12,6 @@ REPO_PATH        = "/home/suvash/workspace/python/web-miner/Web-miner/Repo/"
 
 #UrlFetcher configuration
 NO_OF_CONCURRENT_CONNECTION = 10 
+
+#indexing and searching configuration
+INDEX_PATH = "/home/suvash/index/"
