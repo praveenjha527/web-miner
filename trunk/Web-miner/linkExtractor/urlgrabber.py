@@ -85,18 +85,19 @@ def crawl(url,filemode=None):
 
 if __name__=="__main__":
     #USAGE
-    url='http://www.linuxjournal.com'
+    url='http://everest.ioe.edu.np/lanusers/dialup.php'
     final_urls=crawl(url)
     print len(final_urls)
-    myfile = open("urls.txt","a+")
-    for url in final_urls:
-        try:
-            print repr(url)
-        except:
-            print repr(url.encode('utf-16'))
-        try:
-            myfile.write(url)
-            myfile.write('\n')
-        except:
-            myfile.write(unicode(url))
-            myfile.write('\n')
+    myfile = open("urls1.txt","a+")
+    for url1 in final_urls:
+        for url in url1:
+            try:
+                print repr(url)
+            except:
+                print repr(url.encode('utf-16'))
+            try:
+                myfile.write(url)
+                myfile.write('\n')
+            except:
+                myfile.write(unicode(url))
+                myfile.write('\n')

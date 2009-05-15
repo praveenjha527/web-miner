@@ -1,11 +1,10 @@
-import os
-
 from time import time
 from datetime import timedelta
-
 from lucene import \
      Document, IndexSearcher, FSDirectory, QueryParser, StandardAnalyzer, Hit
 
+sys.path.append("/home/suvash/workspace/python/web-miner/Web-miner")
+from configuration.crawlerConfig import *
 
 class Searcher(object):
 
@@ -48,7 +47,6 @@ class Searcher(object):
 
 
 if __name__ == "__main__":     
-      
     import os, sys, lucene
     lucene.initVM(lucene.CLASSPATH)
     sys.path.append(os.path.dirname(os.path.abspath(sys.argv[0])))
