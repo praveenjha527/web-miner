@@ -9,7 +9,7 @@ from configuration.crawlerConfig import *
 
 def initLucene():
     lucene.initVM(lucene.CLASSPATH)
-    
+   
 def search(q):
     
     initLucene()
