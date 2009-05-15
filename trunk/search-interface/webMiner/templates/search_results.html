@@ -27,12 +27,12 @@ if (qterm != ''){
 
 {% if query_string %}
 <h1>Search Result For {{ query_string }} </h1>
-{% autopaginate result 10 %} 
+{% autopaginate result.result 10 %} 
 <div class="result">
 Please show how to show the links beautiful and nice.
 {% for item in result %}
 
-<a href="{% url itemdetail item.Id%}"><h2>{{result.result}}</h2></a><br/>
+<a href="{{item.url}}"><h2>{{ item.title}}</h2></a><br/>
 {% endfor %}
  {% paginate %} 
  </div>
